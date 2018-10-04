@@ -1,0 +1,26 @@
+version: 2
+jobs:
+  test-unit:
+    docker:
+      - image: circleci/php:7.2-cli-browsers-legacy
+    
+    working_directory: ~/repo
+    steps:
+      - checkout:
+          path: ~/repo
+      - run:
+          name: Copy .env for test environment
+          command: cp ./.circleci/test/.env ./.env
+      - run: composer install --dev -n --prefer-dist
+      - run: mkdir var/data
+      - run: ./bin/phpunit
+      - store_test_results:
+          path: ~/phpunit
+      - store_artifacts:
+          path: ~/phpunit
+
+workflows:
+  version: 2
+  workflow:
+    jobs:
+    - test-unit
