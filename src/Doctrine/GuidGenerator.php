@@ -40,15 +40,19 @@ class GuidGenerator
 
     public function setMaxAttempts($maxAttempts)
     {
+        if (!is_int($maxAttempts)) {
+            throw new GuidGeneratorException('maxAttempts must be an integer. ' . gettype($maxAttempts) . ' given.');
+        }
+
         $this->maxAttempts = $maxAttempts;
 
         return $this;
     }
 
-    public function __construct()
+    public function __construct($index = self::DEFAULT_INDEX, int $maxAttempts = self::DEFAULT_MAX_ATTEMPTS)
     {     
-        $this->setIndexName(self::DEFAULT_INDEX);
-        $this->setMaxAttempts(self::DEFAULT_MAX_ATTEMPTS);
+        $this->setIndexName($index);
+        $this->setMaxAttempts($maxAttempts);
     }
 
     public function generate(ObjectManager $om, $entity, $length = self::DEFAULT_ID_LENGTH)
@@ -63,13 +67,8 @@ class GuidGenerator
 
             if (property_exists($entityName, $this->getIndexName())) {
                 $methodName = 'findOneBy' . ucfirst($this->getIndexName());
-            }
-
-            // Check whether to use "guid" or "id" as index
-            if (property_exists($entityName, 'guid')) {
-                $methodName = 'findOneByGuid';
             } else {
-                $methodName = 'findOneById';
+                throw new GuidGeneratorException('Could not generate id. Entity ' . $entityName . ' has no property named ' . $this->getIndexName());
             }
 
             $item = $om->getRepository($entityName)->$methodName($id);
