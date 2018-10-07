@@ -85,20 +85,178 @@ class GuidGeneratorTest extends TestCase
         );
     }
 
-    public function testGenerate()
+    /**
+     * @dataProvider lengthProvider
+     */
+    public function testGenerate($length)
     {
         $generator = new GuidGenerator;
 
-        //$entity = new IdEntity;
-        print_r(get_declared_classes());
-die;
+        // Entity
+        $entity = new IdEntity;
+
         // Create a stub
         $stub = $this->createMock('\Doctrine\ORM\EntityManager');
 
         // Configure the stub.
         $stub->method('getClassMetadata')
              ->will($this->returnValue($entity));
+        $stub->method('getRepository')
+            ->will($this->returnValue($entity));
 
-        var_dump($generator->generate($stub, new \StdClass));
+        $ret = $generator->generate($stub, $entity, $length);
+
+        $this->assertTrue(is_string($ret));
+        $this->assertEquals($length, strlen($ret));
+    }
+
+    public function lengthProvider()
+    {
+        return array(
+            [GuidGenerator::DEFAULT_ID_LENGTH],
+            [5],
+            [20],
+            [40],
+        );
+    }
+
+    /**
+     * @dataProvider generateWithCustomIdProvider
+     */
+    public function testGenerateWithCustomId($id, $length)
+    {
+        $generator = new GuidGenerator($id, $length);
+
+        // Entity
+        $entity = new IdEntity;
+
+        // Create a stub
+        $stub = $this->createMock('\Doctrine\ORM\EntityManager');
+
+        // Configure the stub.
+        $stub->method('getClassMetadata')
+             ->will($this->returnValue($entity));
+        $stub->method('getRepository')
+            ->will($this->returnValue($entity));
+
+        $ret = $generator->generate($stub, $entity, $length);
+
+        $this->assertTrue(is_string($ret));
+        $this->assertEquals($length, strlen($ret));
+    }
+
+    public function generateWithCustomIdProvider()
+    {
+        return array(
+            array('guid', 4),
+            array('id', 17),
+        );
+    }
+
+    /**
+     * @dataProvider generateWithCustomInvalidIdProvider
+     * @expectedException     ElectiveGroup\Ucc\Doctrine\GuidGeneratorException
+     */
+    public function testGenerateWithInvalidCustomId($id, $length)
+    {
+        $generator = new GuidGenerator($id, $length);
+
+        // Entity
+        $entity = new IdEntity;
+
+        // Create a stub
+        $stub = $this->createMock('\Doctrine\ORM\EntityManager');
+
+        // Configure the stub.
+        $stub->method('getClassMetadata')
+             ->will($this->returnValue($entity));
+        $stub->method('getRepository')
+            ->will($this->returnValue($entity));
+
+        $ret = $generator->generate($stub, $entity, $length);
+
+        $this->assertTrue(is_string($ret));
+        $this->assertEquals($length, strlen($ret));
+    }
+
+    public function generateWithCustomInvalidIdProvider()
+    {
+        return array(
+            array('uuid', 4),
+            array('myId', 17),
+        );
+    }
+
+    /**
+     * @expectedException     ElectiveGroup\Ucc\Doctrine\GuidGeneratorException
+     * @expectedExceptionMessage RandomIdGenerator worked very hard, but failed to generate unique ID
+     */
+    public function testGenerateFail()
+    {
+        $generator = new GuidGenerator;
+
+        // Entity
+        $entity = new IdEntity;
+
+        // Create a repository
+        $repository = new RepositoryStub;
+
+        // Create a em
+        $em = $this->createMock('\Doctrine\ORM\EntityManager');
+        $em->method('getClassMetadata')
+             ->will($this->returnValue($entity));
+        $em->method('getRepository')
+             ->will($this->returnValue($repository));
+
+        $ret = $generator->generate($em, $entity);
+    }
+}
+
+class IdEntity
+{
+    private $id;
+
+    private $guid;
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    public function getGuid()
+    {
+        return $this->guid;
+    }
+
+    public function setGuid($guid)
+    {
+        $this->guid = $guid;
+
+        return $this;
+    }
+
+    public function findOneById()
+    {
+        return;
+    }
+
+    public function findOneByGuid()
+    {
+        return;
+    }
+}
+
+class RepositoryStub
+{
+    public function findOneById()
+    {
+        return true;
     }
 }

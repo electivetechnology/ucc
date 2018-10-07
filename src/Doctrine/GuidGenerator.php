@@ -57,7 +57,7 @@ class GuidGenerator
 
     public function generate(ObjectManager $om, $entity, $length = self::DEFAULT_ID_LENGTH)
     {
-        $entityName = $om->getClassMetadata(get_class($entity))->getName();
+        $entityName = get_class($entity);
 
         // Count number of times generator will try
         $attempt = 0;
