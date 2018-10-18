@@ -12,7 +12,7 @@ jobs:
           name: Copy .env for test environment
           command: cp ./.circleci/test/.env ./.env
       - run: composer install --dev -n --prefer-dist
-      - run: ./bin/phpunit
+      - run: php ./vendor/bin/phpunit
       - store_test_results:
           path: ~/phpunit
       - store_artifacts:
