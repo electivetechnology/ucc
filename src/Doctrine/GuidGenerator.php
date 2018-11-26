@@ -3,7 +3,7 @@
 namespace ElectiveGroup\Ucc\Doctrine;
 
 use ElectiveGroup\Ucc\Doctrine\GuidGeneratorException;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Id\AbstractIdGenerator;
 use Ucc\Crypt\Hash;
 
@@ -71,7 +71,7 @@ class GuidGenerator extends AbstractIdGenerator
         return $this;
     }
 
-    public function generate(ObjectManager $om, $entity)
+    public function generate(EntityManager $em, $entity)
     {
         $entityName = get_class($entity);
 
