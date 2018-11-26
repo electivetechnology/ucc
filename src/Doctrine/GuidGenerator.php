@@ -28,7 +28,7 @@ class GuidGenerator extends AbstractIdGenerator
     {     
         $this->setIndexName($index);
         $this->setMaxAttempts($maxAttempts);
-        $this->setIndexName($length);
+        $this->setLength($length);
     }
 
     public function getIndexName()
@@ -87,7 +87,7 @@ class GuidGenerator extends AbstractIdGenerator
                 throw new GuidGeneratorException('Could not generate id. Entity ' . $entityName . ' has no property named ' . $this->getIndexName());
             }
 
-            $item = $om->getRepository($entityName)->$methodName($id);
+            $item = $em->getRepository($entityName)->$methodName($id);
 
             if (!$item) {
                 return $id;
