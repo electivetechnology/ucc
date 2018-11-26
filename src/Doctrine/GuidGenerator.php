@@ -22,6 +22,15 @@ class GuidGenerator extends AbstractIdGenerator
 
     private $maxAttempts;
 
+    private $length;
+
+    public function __construct($index = self::DEFAULT_INDEX, int $maxAttempts = self::DEFAULT_MAX_ATTEMPTS, $length = self::DEFAULT_ID_LENGTH)
+    {     
+        $this->setIndexName($index);
+        $this->setMaxAttempts($maxAttempts);
+        $this->setIndexName($length);
+    }
+
     public function getIndexName()
     {
         return $this->indexName;
@@ -50,13 +59,19 @@ class GuidGenerator extends AbstractIdGenerator
         return $this;
     }
 
-    public function __construct($index = self::DEFAULT_INDEX, int $maxAttempts = self::DEFAULT_MAX_ATTEMPTS)
-    {     
-        $this->setIndexName($index);
-        $this->setMaxAttempts($maxAttempts);
+    public function getLength()
+    {
+        return $this->length;
     }
 
-    public function generate(ObjectManager $om, $entity, $length = self::DEFAULT_ID_LENGTH)
+    public function setLength($length)
+    {
+        $this->length = $length;
+
+        return $this;
+    }
+
+    public function generate(ObjectManager $om, $entity)
     {
         $entityName = get_class($entity);
 
@@ -64,7 +79,7 @@ class GuidGenerator extends AbstractIdGenerator
         $attempt = 0;
 
         while (true) {
-            $id = Hash::generateSalt($length, false);
+            $id = Hash::generateSalt($this->getLength(), false);
 
             if (property_exists($entityName, $this->getIndexName())) {
                 $methodName = 'findOneBy' . ucfirst($this->getIndexName());
