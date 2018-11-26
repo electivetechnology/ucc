@@ -2,16 +2,17 @@
 
 namespace ElectiveGroup\Ucc\Doctrine;
 
-use Doctrine\Common\Persistence\ObjectManager;
-use Ucc\Crypt\Hash;
 use ElectiveGroup\Ucc\Doctrine\GuidGeneratorException;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\Id\AbstractIdGenerator;
+use Ucc\Crypt\Hash;
 
 /**
  * ElectiveGroup\Ucc\Doctrine\GuidGenerator
  *
  * @author Kris Rybak <kris.rybak@electivegroup.com>
  */
-class GuidGenerator
+class GuidGenerator extends AbstractIdGenerator
 {
     const DEFAULT_ID_LENGTH     = 12;
     const DEFAULT_INDEX         = 'id';
