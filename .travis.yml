@@ -1,7 +1,7 @@
 language: php
 
 install:
-  - composer install
+  - composer install --dev
 
 php:
   - 7.1
@@ -9,4 +9,4 @@ php:
   - 7.3
 
 script:
-  - phpunit --configuration phpunit.xml.dist .
+  - ./vendor/bin/phpunit --configuration phpunit.xml.dist .
