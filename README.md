@@ -9,10 +9,10 @@ The UCC may contain 3rd party dependency, but this will be listed here and manag
 
 ## Requirements
 * PHP 7.x
+* doctrine/orm ^2.6
 
 ## Usage and Installation
 
 Install as a vendor using `composer`. Don't have a composer, get it from [here](https://getcomposer.org/)
-
 
 ## Setup for Developers
