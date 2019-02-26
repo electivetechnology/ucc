@@ -9,4 +9,4 @@ php:
   - 7.3
 
 script:
-  - ./vendor/bin/phpunit --configuration phpunit.xml.dist .
+  - ./vendor/bin/phpunit
