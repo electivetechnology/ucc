@@ -1,4 +1,6 @@
 # ucc
+
+[![Build Status](https://travis-ci.org/electivegroup/ucc.svg?branch=master)](https://travis-ci.org/electivegroup/ucc)
 Utilities Class Collection
 
 ## Introduction
