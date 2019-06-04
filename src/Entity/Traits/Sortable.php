@@ -2,8 +2,6 @@
 
 namespace ElectiveGroup\Ucc\Entity\Traits;
 
-use ElectiveGroup\Ucc\Entity\Traits\Timestampable\UpdatableInterface;
-use ElectiveGroup\Ucc\Entity\Traits\Timestampable\Updatable;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 
@@ -54,7 +52,7 @@ trait Sortable {
         array $list = array(),
         $i = 1
     ): array {
-        $updated = array();
+        $sorted = array();
 
         if (!empty($list)) {
             foreach ($collection as $item) {
@@ -65,23 +63,17 @@ trait Sortable {
                     // Assign new order index
                     $orderIndex = $key + $i;
                     if ($item->getOrderIndex() != $orderIndex) {
-                        $updated[] = $item->setOrderIndex($orderIndex);
-
-                        // Update item if possible
-                        Updatable::updateTimestamp($item);
+                        $sorted[] = $item->setOrderIndex($orderIndex);
                     }
                 } else {
                     // Remove old order index and set item as unordered
                     if (!is_null($item->getOrderIndex())) {
-                        $updated[] = $item->setOrderIndex(null);
-
-                        // Update item if possible
-                        Updatable::updateTimestamp($item);
+                        $sorted[] = $item->setOrderIndex(null);
                     }
                 }
             }
         }
 
-        return $updated;
+        return $sorted;
     }
 }
