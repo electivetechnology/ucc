@@ -9,7 +9,9 @@ namespace ElectiveGroup\Ucc\Entity\Traits\Timestampable;
  */
 interface UpdatableInterface
 {
-    public function getUpdatedAt(): ?\DateTimeInterface;
+    public function getUpdatedAt();
 
-    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self;
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt = null);
+
+    public static function updateTimestamp(UpdatableInterface $object);
 }
