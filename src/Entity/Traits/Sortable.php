@@ -2,6 +2,7 @@
 
 namespace ElectiveGroup\Ucc\Entity\Traits;
 
+use ElectiveGroup\Ucc\Entity\Traits\Timestampable\Updatable;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 
@@ -59,6 +60,10 @@ trait Sortable {
                     $item->setOrderIndex($key + $i);
                 } else {
                     $item->setOrderIndex(null);
+                }
+
+                if ($item instanceof UpdatableInterface) {
+                    $item->setUpdatedAt(new DateTime());
                 }
             }
         }
