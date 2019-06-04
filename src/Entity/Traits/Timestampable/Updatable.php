@@ -3,7 +3,7 @@
 namespace ElectiveGroup\Ucc\Entity\Traits\Timestampable;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use ElectiveGroup\Ucc\Entity\Traits\Timestampable\UpdatableInterface;
 /**
  * ElectiveGroup\Ucc\Entity\Traits\Timestampable\Updatable
  *
@@ -31,10 +31,23 @@ trait Updatable {
      * @param   $updatedAt DateTimeInterface
      * @return  self
      */
-    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt = null): self
     {
+        if (is_null($updatedAt)) {
+            $updatedAt = new \DateTime();
+        }
+
         $this->updatedAt = $updatedAt;
 
         return $this;
+    }
+
+    public static function updateTimestamp($object)
+    {
+        if ($object instanceof UpdatableInterface) {
+            $object->setUpdatedAt();
+        }
+
+        return $object;
     }
 }

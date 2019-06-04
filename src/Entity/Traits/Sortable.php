@@ -2,6 +2,7 @@
 
 namespace ElectiveGroup\Ucc\Entity\Traits;
 
+use ElectiveGroup\Ucc\Entity\Traits\Timestampable\UpdatableInterface;
 use ElectiveGroup\Ucc\Entity\Traits\Timestampable\Updatable;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
@@ -46,28 +47,41 @@ trait Sortable {
      * @param   PersistentCollection    $collection     collection to sort
      * @param   array                   $list           ordered list
      * @param   int                     $i              Initial index, default 1
-     * @return array
+     * @return array                    List of sorted items
      */
     public function sortCollection(
         PersistentCollection $collection,
         array $list = array(),
         $i = 1
-    ): PersistentCollection {
+    ): array {
+        $updated = array();
+
         if (!empty($list)) {
             foreach ($collection as $item) {
+                // Check item is in the ordered list and retrieve its key (orderIndex)
                 $key = array_search($item, $list);
-                if ($key !== false) {
-                    $item->setOrderIndex($key + $i);
-                } else {
-                    $item->setOrderIndex(null);
-                }
 
-                if ($item instanceof UpdatableInterface) {
-                    $item->setUpdatedAt(new DateTime());
+                if ($key !== false) {
+                    // Assign new order index
+                    $orderIndex = $key + $i;
+                    if ($item->getOrderIndex() != $orderIndex) {
+                        $updated[] = $item->setOrderIndex($orderIndex);
+
+                        // Update item if possible
+                        Updatable::updateTimestamp($item);
+                    }
+                } else {
+                    // Remove old order index and set item as unordered
+                    if (!is_null($item->getOrderIndex())) {
+                        $updated[] = $item->setOrderIndex(null);
+
+                        // Update item if possible
+                        Updatable::updateTimestamp($item);
+                    }
                 }
             }
         }
 
-        return $collection;
+        return $updated;
     }
 }
