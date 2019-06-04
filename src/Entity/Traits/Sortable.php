@@ -3,6 +3,7 @@
 namespace ElectiveGroup\Ucc\Entity\Traits;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 /**
  * ElectiveGroup\Ucc\Entity\Traits\Sortable
@@ -36,5 +37,32 @@ trait Sortable {
     public function getOrderIndex(): ?int
     {
         return $this->orderIndex;
+    }
+
+    /**
+     * Sorts collection
+     *
+     * @param   PersistentCollection    $collection     collection to sort
+     * @param   array                   $list           ordered list
+     * @param   int                     $i              Initial index, default 1
+     * @return array
+     */
+    public function sortCollection(
+        PersistentCollection $collection,
+        array $list = array(),
+        $i = 1
+    ): PersistentCollection {
+        if (!empty($list)) {
+            foreach ($collection as $item) {
+                $key = array_search($item, $list);
+                if ($key !== false) {
+                    $item->setOrderIndex($key + $i);
+                } else {
+                    $item->setOrderIndex(null);
+                }
+            }
+        }
+
+        return $collection;
     }
 }
