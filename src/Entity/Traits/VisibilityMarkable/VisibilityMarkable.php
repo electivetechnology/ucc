@@ -72,9 +72,9 @@ trait VisibilityMarkable {
     /**
      * Is public
      *
-     * @return VisibilityMarkable
+     * @return bool
      */
-    public function isPublic(): boolean
+    public function isPublic(): bool
     {
         if ($this->getVisibility() === self::VISIBILITY_PUBLIC) {
             return true;
@@ -86,9 +86,9 @@ trait VisibilityMarkable {
     /**
      * Is private
      *
-     * @return VisibilityMarkable
+     * @return bool
      */
-    public function isPrivate(): boolean
+    public function isPrivate(): bool
     {
         if ($this->getVisibility() === self::VISIBILITY_PRIVATE) {
             return true;
@@ -100,9 +100,9 @@ trait VisibilityMarkable {
     /**
      * Is protected
      *
-     * @return VisibilityMarkable
+     * @return bool
      */
-    public function isProtected(): boolean
+    public function isProtected(): bool
     {
         if ($this->getVisibility() === self::VISIBILITY_PROTECTED) {
             return true;
