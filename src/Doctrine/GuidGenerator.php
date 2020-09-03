@@ -71,9 +71,11 @@ class GuidGenerator extends AbstractIdGenerator
         return $this;
     }
 
-    public function generate(EntityManager $em, $entity, $length = self::DEFAULT_ID_LENGTH)
+    public function generate(EntityManager $em, $entity, $length = null)
     {
-        $this->setLength($length);
+        if ($length) {
+            $this->setLength($length);
+        }
 
         $entityName = get_class($entity);
 
