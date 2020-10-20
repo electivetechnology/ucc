@@ -11,8 +11,8 @@ The Utilities Class Collection (UCC) is just that, a collection of classes that 
 The UCC may contain 3rd party dependency, but this will be listed here and managed via composer.
 
 ## Requirements
-* PHP 7.x
-* doctrine/orm ^2.6
+* PHP 7.3
+* doctrine/orm ^2.7
 
 ## Usage and Installation
 
