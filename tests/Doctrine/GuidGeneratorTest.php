@@ -65,11 +65,11 @@ class GuidGeneratorTest extends TestCase
     }
 
     /**
-     * @expectedException ElectiveGroup\Ucc\Doctrine\GuidGeneratorException
      * @dataProvider invalidMaxAttemptsProvider
      */
     public function testInvalidMaxAttempts($maxAttempts)
     {
+        $this->expectException(GuidGeneratorException::class);
         $generator = new GuidGenerator;
 
         $this->assertInstanceOf(GuidGenerator::class, $generator->setMaxAttempts($maxAttempts));
@@ -155,10 +155,10 @@ class GuidGeneratorTest extends TestCase
 
     /**
      * @dataProvider generateWithCustomInvalidIdProvider
-     * @expectedException     ElectiveGroup\Ucc\Doctrine\GuidGeneratorException
      */
     public function testGenerateWithInvalidCustomId($id, $length)
     {
+        $this->expectException(GuidGeneratorException::class);
         $generator = new GuidGenerator($id, $length);
 
         // Entity
@@ -188,11 +188,11 @@ class GuidGeneratorTest extends TestCase
     }
 
     /**
-     * @expectedException     ElectiveGroup\Ucc\Doctrine\GuidGeneratorException
      * @expectedExceptionMessage RandomIdGenerator worked very hard, but failed to generate unique ID
      */
     public function testGenerateFail()
     {
+        $this->expectException(GuidGeneratorException::class);
         $generator = new GuidGenerator;
 
         // Entity
