@@ -17,8 +17,7 @@ class ProgressableTest extends TestCase
         $progress = 'completed';
         $mock   = $this->getMockForTrait(Progressable::class);
 
-        $this->assertInstanceOf(get_class($mock), $progress);
-        $this->assertSame($progress, $mock->getCreatedAt());
+        $this->assertSame($progress, $mock->getProgress());
         $this->assertTrue(property_exists(Progressable::class, "progress"));
     }
 }
